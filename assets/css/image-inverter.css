@@ -1,0 +1,147 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #0f1220;
+    color: #ffffff;
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: #262b5f;
+    text-decoration: none;
+    color: white;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.back:hover {
+    background: #3a4080;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.controls {
+    background: #1b1f3b;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+input, button {
+    padding: 0.7rem;
+    border: 2px solid #262b5f;
+    border-radius: 6px;
+    background: #0f1220;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+input:focus {
+    outline: none;
+    border-color: #51cf66;
+}
+
+button {
+    background: #51cf66;
+    color: #000;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #40c057;
+}
+
+button.danger {
+    background: #ff6b6b;
+    color: white;
+}
+
+button.danger:hover {
+    background: #ff5252;
+}
+
+.preview-area {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.preview-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.preview-item {
+    text-align: center;
+}
+
+.preview-item h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 8px;
+    display: none;
+}
+
+img.visible {
+    display: block;
+}
+
+.placeholder {
+    color: #666;
+    padding: 3rem;
+    font-size: 1.1rem;
+}
+
+.downloadsec {
+    display: none;
+    gap: 1rem;
+}
+
+.downloadsec button {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .preview-container {
+        grid-template-columns: 1fr;
+    }
+}
