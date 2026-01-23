@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Color Inverter | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/image-inverter.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Image Color Inverter</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="imgupl">Upload Image:</label>
+                    <inpit type="file" id="imgupl" accept="image/*"></inpit>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp</label>
+                    <button onclick="invimg()">Invert Colors</button>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="danger" onclick="resetinv()">Reset</button>
+                </div>
+            </div>
+            <div class="preview-area">
+                <div class="preview-container">
+                    <div class="preview-item">
+                        <h3>Original</h3>
+                        <img id="ogimg" src="" alt="Original Image">
+                        <div class="placeholder" id="ogplaceholder">Upload an Image</div>
+                    </div>
+                    <div class="preview-item">
+                        <h3>Inverted</h3>
+                        <canvas id="invcanvas" style="max-width: 100%; max-height: 400px; border-radius: 8px; display: none;"></canvas>
+                        <div class="placeholder" id="invplaceholder">Inverted image will show up here</div>
+                    </div>
+                </div>
+                <div class="downloadsec" id="downloadsec">
+                    <button onclick="downloadinvimg()">⬇ Download Inverted Image</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            //script goes here :))
+        </script>
+    </body>
+</html>
