@@ -4,10 +4,11 @@
         <meta charset="UTF-8">
         <meta mame="viewport" content="width=device-width", initial-scale="1.0">
         <title>Image Cropper | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/image-cropper.css"
     </head>
     <body>
         <div class="container">
-            <a href="../../index.html" class="back"> ←Go Back</a>
+            <a href="../../index.html" class="back"> ← Go Back</a>
             <h1>Image Cropper</h1>
             <div class="controls">
                 <div class="control-group">
@@ -24,7 +25,28 @@
                         <option value="3/2">3:2</option>
                     </select>
                 </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button onclick="cropImage()">Crop Image</button>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp;</label>
+                    <button class="danger" onclick="resetCropper()">Reset</button>
+                </div>
+            </div>
+            <div class="preview">
+                <div id="imgcontainer">
+                    <img id="uplimg" src="" alt="Uploaded Image">
+                    <div id="cropbox"></div>
+                    <div class="placeholder" id="placeholder">Upload an Image</div>
+                </div>
+                <div id="downloadsec" style="display: none; margin-top: 1.5rem;">
+                    <button onclick="downloadcrop()" style="background: #51cf66; color: #000; font-weight: bold; padding: 0.7rem 1.5rem;">⬇ Download Cropped Image</button>
+                </div>
             </div>
         </div>
+        <script>
+
+        </script>
     </body>
 </html>
