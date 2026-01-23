@@ -8,10 +8,7 @@ body {
     color: #ffffff;
     padding: 2rem 1rem;
 }
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-}
+
 .back {
     display: inline-block;
     margin-bottom: 1rem;
@@ -25,10 +22,7 @@ body {
 .back:hover {
     background: #3a4080;
 }
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-}
+
 .controls {
     background: #1b1f3b;
     padding: 1.5rem;
@@ -38,15 +32,18 @@ h1 {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
 }
+
 .control-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
+
 label {
     font-weight: bold;
     font-size: 0.9rem;
 }
+
 input, button, select {
     padding: 0.7rem;
     border: 2px solid #262b5f;
@@ -56,26 +53,41 @@ input, button, select {
     font-size: 1rem;
     cursor: pointer;
 }
+
 input:focus, select:focus {
     outline: none;
     border-color: #51cf66;
 }
+
 button {
     background: #51cf66;
     color: #000;
     font-weight: bold;
     transition: background 0.2s;
 }
+
 button:hover {
     background: #40c057;
 }
+
 button.danger {
     background: #ff6b6b;
     color: white;
 }
+
 button.danger:hover {
     background: #ff5252;
 }
+
+button.secondary {
+    background: #727272;
+    color: white;
+}
+
+button.secondary:hover {
+    background: #4d4d4d;
+}
+
 .preview {
     background: #1b1f3b;
     border-radius: 12px;
@@ -83,28 +95,47 @@ button.danger:hover {
     text-align: center;
     position: relative;
 }
+
 #imgcontainer {
     position: relative;
     display: inline-block;
     margin-bottom: 1.5rem;
 }
+
 #uplimg {
     max-width: 100%;
     max-height: 500px;
     display: none;
     border-radius: 8px;
 }
+
 #cropbox {
     position: absolute;
     border: 2px dashed #51cf66;
     background: rgba(81, 207, 102, 0.1);
     cursor: move;
     display: none;
-    resize: both;
+    resize: none; /* disable manual resizing */
     overflow: hidden;
     min-width: 50px;
     min-height: 50px;
 }
+
+/* resize handles */
+.handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #51cf66;
+    border: 2px solid #0f1220;
+    box-sizing: content-box;
+    border-radius: 2px;
+}
+.handle-nw { left: -8px; top: -8px; cursor: nwse-resize; }
+.handle-ne { right: -8px; top: -8px; cursor: nesw-resize; }
+.handle-se { right: -8px; bottom: -8px; cursor: nwse-resize; }
+.handle-sw { left: -8px; bottom: -8px; cursor: nesw-resize; }
+
 .placeholder {
     color: #666;
     padding: 3rem;
