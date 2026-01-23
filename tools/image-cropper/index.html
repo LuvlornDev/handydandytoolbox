@@ -2,9 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta mame="viewport" content="width=device-width", initial-scale="1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Image Cropper | Ø's Handy Dandy Toolbox</title>
-        <link rel="stylesheet" href="../../assets/css/image-cropper.css"
+        <link rel="stylesheet" href="../../assets/css/image-cropper.css">
     </head>
     <body>
         <div class="container">
@@ -12,8 +12,8 @@
             <h1>Image Cropper</h1>
             <div class="controls">
                 <div class="control-group">
-                    <label for="imageUpload">Upload Image:</label>
-                    <input type="file" id="imageUpload" accept="image/*">
+                    <label for="imgupl">Upload Image:</label>
+                    <input type="file" id="imgupl" accept="image/*">
                 </div>
                 <div class="control-group">
                     <label for="aspectRatio">Aspect Ratio:</label>
@@ -24,20 +24,30 @@
                         <option value="4/3">4:3</option>
                         <option value="3/2">3:2</option>
                     </select>
+                
                 </div>
                 <div class="control-group">
                     <label>&nbsp;</label>
-                    <button onclick="cropImage()">Crop Image</button>
+                    <button onclick="cropimg()">Crop Image</button>
                 </div>
                 <div class="control-group">
                     <label>&nbsp;</label>
-                    <button class="danger" onclick="resetCropper()">Reset</button>
+                    <button class="danger" onclick="resetcrop()">Reset</button>
+                </div>
+                <div class="control-group">
+                    <label>&nbsp</label>
+                    <button id="rotateBtn" class="secondary">⟳ Rotate</button>
                 </div>
             </div>
             <div class="preview">
                 <div id="imgcontainer">
                     <img id="uplimg" src="" alt="Uploaded Image">
-                    <div id="cropbox"></div>
+                    <div id="cropbox">
+                        <div class="handle handle-nw" data-dir="nw"></div>
+                        <div class="handle handle-ne" data-dir="ne"></div>
+                        <div class="handle handle-se" data-dir="se"></div>
+                        <div class="handle handle-sw" data-dir="sw"></div>
+                    </div>
                     <div class="placeholder" id="placeholder">Upload an Image</div>
                 </div>
                 <div id="downloadsec" style="display: none; margin-top: 1.5rem;">
@@ -46,7 +56,240 @@
             </div>
         </div>
         <script>
+            let uplimg = document.getElementById('uplimg');
+            let imgcontainer = document.getElementById('imgcontainer');
+            let cropbox = document.getElementById('cropbox');
+            let imgupl = document.getElementById('imgupl');
+            let placeholder = document.getElementById('placeholder');
+            let downloadsec = document.getElementById('downloadsec');
+            let drag = false;
+            let initx, inity, initl, initt;
+            let resizing = false;
+            let resizeDir = null;
+            let initresize = {};
+            let rotated = false;
+            const aspectSelect = document.getElementById('aspectRatio');
+            const rotateBtn = document.getElementById('rotateBtn');
+            rotateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleRotate();
+            });
+            uplimg.draggable = false;
+            imgupl.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        uplimg.src = event.target.result;
+                        uplimg.style.display = 'block';
+                        placeholder.style.display = 'none';
+                        cropbox.style.display = 'block';
+                        downloadsec.style.display = 'none';
+                        uplimg.onload = () => {
+                            imgcontainer.style.width = uplimg.width + 'px';
+                            imgcontainer.style.height = uplimg.height + 'px';
+                            const w = Math.min(300, uplimg.width - 20);
+                            const h = Math.min(300, uplimg.height - 20);
+                            cropbox.style.width = w + 'px';
+                            cropbox.style.height = h + 'px';
+                            cropbox.style.left = '10px';
+                            cropbox.style.top = '10px';
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            cropbox.addEventListener('mousedown', (e) => {
+                if (e.target !== cropbox) return;
+                drag = true;
+                initx = e.clientX;
+                inity = e.clientY;
+                initl = cropbox.offsetLeft;
+                initt = cropbox.offsetTop;
+            });
+            cropbox.querySelectorAll('.handle').forEach(h => {
+                h.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    resizing = true;
+                    resizeDir = h.dataset.dir;
+                    initresize = {
+                        startX: e.clientX,
+                        startY: e.clientY,
+                        left: cropbox.offsetLeft,
+                        top: cropbox.offsetTop,
+                        width: cropbox.offsetWidth,
+                        height: cropbox.offsetHeight
+                    };
+                });
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (resizing) {
+                    const dx = e.clientX - initresize.startX;
+                    const dy = e.clientY - initresize.startY;
+                    let newLeft = initresize.left;
+                    let newTop = initresize.top;
+                    let newWidth = initresize.width;
+                    let newHeight = initresize.height;
+                    const ratioVal = aspectSelect.value.trim();
+                    let baseRatio = null;
+                    if (ratioVal !== '') {
+                        if (ratioVal.includes('/')) {
+                            const parts = ratioVal.split('/').map(Number);
+                            baseRatio = parts[0] / parts[1];
+                        } else {
+                            baseRatio = Number(ratioVal);
+                        }
+                    }
+                    let ratio = baseRatio ? (rotated ? 1 / baseRatio : baseRatio) : null;
+                    if (resizeDir === 'se') {
+                        newWidth = initresize.width + dx;
+                        newHeight = initresize.height + dy;
+                    } else if (resizeDir === 'sw') {
+                        newWidth = initresize.width - dx;
+                        newHeight = initresize.height + dy;
+                        newLeft = initresize.left + dx;
+                    } else if (resizeDir === 'ne') {
+                        newWidth = initresize.width + dx;
+                        newHeight = initresize.height - dy;
+                        newTop = initresize.top + dy;
+                    } else if (resizeDir === 'nw') {
+                        newWidth = initresize.width - dx;
+                        newHeight = initresize.height - dy;
+                        newLeft = initresize.left + dx;
+                        newTop = initresize.top + dy;
+                    }
+                    if (ratio) {
+                        const widthFromHeight = newHeight * ratio;
+                        const heightFromWidth = newWidth / ratio;
+                        if (Math.abs(widthFromHeight - newWidth) < Math.abs(heightFromWidth - newHeight)) {
+                            newWidth = widthFromHeight;
+                        } else {
+                            newHeight = heightFromWidth;
+                        }
+                        if (resizeDir === 'nw' || resizeDir === 'sw') {
+                            newLeft = initresize.left + (initresize.width - newWidth);
+                        }
+                        if (resizeDir === 'nw' || resizeDir === 'ne') {
+                            newTop = initresize.top + (initresize.height - newHeight);
+                        }
+                    }
+                    const minSize = 30;
+                    newWidth = Math.max(minSize, newWidth);
+                    newHeight = Math.max(minSize, newHeight);
+                    const maxLeft = imgcontainer.clientWidth;
+                    const maxTop = imgcontainer.clientHeight;
+                    if (newLeft < 0) {
+                        const overflow = -newLeft;
+                        newLeft = 0;
+                        newWidth -= overflow;
+                        if (ratio) newHeight = newWidth / ratio;
+                    }
+                    if (newTop < 0) {
+                        const overflow = -newTop;
+                        newTop = 0;
+                        newHeight -= overflow;
+                        if (ratio) newWidth = newHeight * ratio;
+                    }
+                    if (newLeft + newWidth > imgcontainer.clientWidth) {
+                        newWidth = imgcontainer.clientWidth - newLeft;
+                        if (ratio) newHeight = newWidth / ratio;
+                    }
+                    if (newTop + newHeight > imgcontainer.clientHeight) {
+                        newHeight = imgcontainer.clientHeight - newTop;
+                        if (ratio) newWidth = newHeight * ratio;
+                    }
 
+                    cropbox.style.width = Math.max(1, Math.round(newWidth)) + 'px';
+                    cropbox.style.height = Math.max(1, Math.round(newHeight)) + 'px';
+                    cropbox.style.left = Math.round(newLeft) + 'px';
+                    cropbox.style.top = Math.round(newTop) + 'px';
+
+                    return;
+                }
+
+                if (!drag) return;
+                const deltax = e.clientX - initx;
+                const deltay = e.clientY - inity;
+                const newLeft = Math.max(0, Math.min(initl + deltax, imgcontainer.clientWidth - cropbox.offsetWidth));
+                const newTop = Math.max(0, Math.min(initt + deltay, imgcontainer.clientHeight - cropbox.offsetHeight));
+                cropbox.style.left = newLeft + 'px';
+                cropbox.style.top = newTop + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                drag = false;
+                resizing = false;
+                resizeDir = null;
+            });
+
+            function cropimg() {
+                if (!uplimg.src) return;
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const scalex = uplimg.naturalWidth / uplimg.width;
+                const scaley = uplimg.naturalHeight / uplimg.height;
+
+                const sx = Math.round(cropbox.offsetLeft * scalex);
+                const sy = Math.round(cropbox.offsetTop * scaley);
+                const sWidth = Math.round(cropbox.offsetWidth * scalex);
+                const sHeight = Math.round(cropbox.offsetHeight * scaley);
+                canvas.width = sWidth;
+                canvas.height = sHeight;
+                ctx.drawImage(uplimg, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+                uplimg.src = canvas.toDataURL();
+                cropbox.style.display = 'none';
+                downloadsec.style.display = 'block';
+            }
+
+            function resetcrop() {
+                uplimg.style.display = 'none';
+                placeholder.style.display = 'block';
+                cropbox.style.display = 'none';
+                downloadsec.style.display = 'none';
+                imgupl.value = '';
+                imgcontainer.style.width = '';
+                imgcontainer.style.height = '';
+            }
+
+            function toggleRotate() {
+                rotated = !rotated;
+                const ratioVal = aspectSelect.value.trim();
+                if (!ratioVal) return;
+                let baseRatio;
+                if (ratioVal.includes('/')) {
+                    const parts = ratioVal.split('/').map(Number);
+                    baseRatio = parts[0] / parts[1];
+                } else {
+                    baseRatio = Number(ratioVal);
+                }
+                const effective = rotated ? 1 / baseRatio : baseRatio;
+                const cx = cropbox.offsetLeft + cropbox.offsetWidth / 2;
+                const cy = cropbox.offsetTop + cropbox.offsetHeight / 2;
+                let newWidth = cropbox.offsetWidth;
+                let newHeight = Math.max(30, Math.round(newWidth / effective));
+                if (newHeight > imgcontainer.clientHeight) {
+                    newHeight = imgcontainer.clientHeight;
+                    newWidth = Math.round(newHeight * effective);
+                }
+                let newLeft = Math.round(cx - newWidth / 2);
+                let newTop = Math.round(cy - newHeight / 2);
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + newWidth > imgcontainer.clientWidth) newLeft = imgcontainer.clientWidth - newWidth;
+                if (newTop + newHeight > imgcontainer.clientHeight) newTop = imgcontainer.clientHeight - newHeight;
+                cropbox.style.width = newWidth + 'px';
+                cropbox.style.height = newHeight + 'px';
+                cropbox.style.left = newLeft + 'px';
+                cropbox.style.top = newTop + 'px';
+            }
+
+            function downloadcrop() {
+                const link = document.createElement('a');
+                link.href = uplimg.src;
+                link.download = 'your-cropped-pic.png';
+                link.click();
+            }
         </script>
     </body>
 </html>
