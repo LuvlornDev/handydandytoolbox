@@ -13,7 +13,7 @@
             <div class="controls">
                 <div class="control-group">
                     <label for="imgupl">Upload Image:</label>
-                    <inpit type="file" id="imgupl" accept="image/*"></inpit>
+                    <input type="file" id="imgupl" accept="image/*"></input>
                 </div>
                 <div class="control-group">
                     <label>&nbsp</label>
@@ -43,7 +43,73 @@
             </div>
         </div>
         <script>
-            //script goes here :))
+            const ogimg = document.getElementById('ogimg');
+            const invcanvas = document.getElementById('invcanvas');
+            const imgupl = document.getElementById('imgupl');
+            const downloadsec = document.getElementById('downloadsec');
+            const ogplaceholder = document.getElementById('ogplaceholder');
+            const invplaceholder = document.getElementById('invplaceholder');
+
+            imgupl.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    ogimg.src = event.target.result;
+                    ogimg.style.display = 'block';
+                    ogplaceholder.style.display = 'none';
+
+                    invcanvas.style.display = 'none';
+                    invplaceholder.style.display = 'block';
+                    downloadsec.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            });
+
+            function invimg() {
+                if (!ogimg.src) return;
+
+                const ctx = invcanvas.getContext('2d');
+                invcanvas.width = ogimg.naturalWidth;
+                invcanvas.height = ogimg.naturalHeight;
+
+                ctx.drawImage(ogimg, 0, 0);
+
+                const imgdata = ctx.getImageData(0, 0, invcanvas.width, invcanvas.height);
+                const data = imgdata.data;
+
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = 255 - data[i];       // Red
+                    data[i + 1] = 255 - data[i + 1]; // Green
+                    data[i + 2] = 255 - data[i + 2]; // Blue
+                }
+
+                ctx.putImageData(imgdata, 0, 0);
+
+                invcanvas.style.display = 'block';
+                invplaceholder.style.display = 'none';
+                downloadsec.style.display = 'flex';
+            }
+
+            function resetinv() {
+                ogimg.src = '';
+                ogimg.style.display = 'none';
+                ogplaceholder.style.display = 'block';
+
+                invcanvas.style.display = 'none';
+                invplaceholder.style.display = 'block';
+                downloadsec.style.display = 'none';
+
+                imgupl.value = '';
+            }
+
+            function downloadinvimg() {
+                const link = document.createElement('a');
+                link.href = invcanvas.toDataURL('image/png');
+                link.download = 'inverted-image.png';
+                link.click();
+            }
         </script>
     </body>
 </html>
