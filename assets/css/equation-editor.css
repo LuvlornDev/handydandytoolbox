@@ -1,0 +1,150 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+body {
+    margin: 0;
+    background: #0f1220;
+    color: #ffffff;
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: #262b5f;
+    text-decoration: none;
+    color: white;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.back:hover {
+    background: #3a4080;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.editsection {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem
+}
+
+.editlabel {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 1rem;
+    border: 2px solid #262b5f;
+    border-radius: 8px;
+    background: #0f1220;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    resize: vertical;
+}
+textarea:focus {
+    outline: none;
+    border-color: #51cf66;
+}
+
+.prevsection {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    min-height: 200px;
+    border: 2px solid #262b5f;
+}
+
+.prevlabel {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+#preview {
+    font-size: 1.2rem;
+    color: #ffffff;
+}
+
+.buttongroup {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: #51cf66;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 1rem;
+}
+
+button:hover {
+    background: #40c057;
+}
+
+button.secondary {
+    background: #262b5f;
+    color: white;
+}
+
+button.secondary:hover {
+    background: #3a4080;
+}
+
+button.danger {
+    background: #ff6b6b;
+    color: white;
+}
+
+button.danger:hover {
+    background: #ff5252;
+}
+
+.shortcuts {
+    background: #0f1220;
+    border-left: 4px solid #51cf66;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.shortcuts h4 {
+    margin-top: 0;
+    color: #51cf66;
+}
+
+.shortcut {
+    margin: 0.5rem 0;
+}
+
+.shortcutkey {
+    color: #ffd93d;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
