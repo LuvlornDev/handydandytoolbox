@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Equation Editor | Ø's Handy Dandy Toolbox</title>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <link rel="stylesheet" href="../../assets/css/equation-editor.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Equation Editor</h1>
+            <div class="editsection">
+                <label class="editlabel">LaTeX Equation:</label>
+                <textarea id="eqInput" placeholder="Enter LaTeX Equation"></textarea>
+                <div class="buttongroup" style="margin-top: 1rem;">
+                    <button onclick="updatePrev()">Render Equation</button>
+                    <button class="sec" onclick="clearEq()">Clear</button>
+                </div>
+                <div class="shortcuts">
+                    <h4>Common LaTeX Shortcuts:</h4>
+                    <div class="shortcut"><span class="shortcutkey">\frac{a}{b}</span> - Fraction</div>
+                    <div class="shortcut"><span class="shortcutkey">\sqrt{x}</span> - Square Root</div>
+                    <div class="shortcut"><span class="shortcutkey">x^{2}</span> - Exponent</div>
+                    <div class="shortcut"><span class="shortcutkey">x_{i}</span> - Subscript</div>
+                    <div class="shortcut"><span class="shortcutkey">\alpha, \beta, \gamma</span> - Greek Letters</div>
+                    <div class="shortcut"><span class="shortcutkey">\sin, \cos, \tan</span> - Trigonometric Function</div>
+                    <div class="shortcut"><span class="shortcutkey">\int</span> - Integral</div>
+                    <div class="shortcut"><span class="shortcutkey">\sum</span> - Summation</div>
+                </div>
+            </div>
+            <div class="prevsection">
+                <div class="prevlabel">Preview:</div>
+                <div id="preview">$$\text{Enter an equation and click Render}$$</div>
+            </div>
+            <div class="editsection">
+                <label class="editlabel">LaTeX Code (to copy):</label>
+                <textarea id="codeOutput" readonly></textarea>
+                <div class="buttongroup" style="margin-top: 1rem;">
+                    <button onclick="copyCode()">Copy LaTeX Code</button>
+                    <button class="secondary" onclick="downloadPNG()">⬇ Download as PNG</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
