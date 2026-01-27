@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scientific Calculator</title>
+        <link rel="stylesheet" href="../../assets/css/calculator.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Back</a>
+            <h1>Scientific Calculator</h1>
+            <div class="calculator">
+                <input type="text" id="display" readonly>
+                <div class="buttons">
+                    <button class="clear" onclick="clearDisplay()">AC</button>
+                    <button onclick="append('(')">(</button>
+                    <button onclick="append(')')">)</button>
+                    <button onclick="append('%')">%</button>
+                    <button onclick="append('Math.sin(')">sin</button>
+                    <button onclick="append('Math.cos(')">cos</button>
+                    <button onclick="append('Math.tan(')">tan</button>
+                    <button class="operator" onclick="append('/')">÷</button>
+                    <button onclick="append('Math.asin(')">sin⁻¹</button>
+                    <button onclick="append('Math.acos(')">cos⁻¹</button>
+                    <button onclick="append('Math.atan(')">tan⁻¹</button>
+                    <button class="operator" onclick="append('*')">×</button>
+                    <button onclick="append('Math.sqrt(')">√</button>
+                    <button onclick="append('Math.log10(')">log</button>
+                    <button onclick="append('Math.log(')">ln</button>
+                    <button class="operator" onclick="append('-')">−</button>
+                    <button onclick="append('Math.PI')">π</button>
+                    <button onclick="append('Math.E')">e</button>
+                    <button onclick="append('**')">xʸ</button>
+                    <button class="operator" onclick="append('+')">+</button>
+                    <button onclick="append('7')">7</button>
+                    <button onclick="append('8')">8</button>
+                    <button onclick="append('9')">9</button>
+                    <button onclick="factorial()">x!</button>
+                    <button onclick="append('4')">4</button>
+                    <button onclick="append('5')">5</button>
+                    <button onclick="append('6')">6</button>
+                    <button onclick="toggleSign()">±</button>
+                    <button onclick="append('1')">1</button>
+                    <button onclick="append('2')">2</button>
+                    <button onclick="append('3')">3</button>
+                    <button class="equals" onclick="calculate()">=</button>
+                    <button onclick="append('0')" class="span-2">0</button>
+                    <button onclick="append('.')">.</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            const display = document.getElementById("display");
+            let expression = "";
+            function append(value) {
+                expression += value;
+                display.value = expression;
+            }
+            function clearDisplay() {
+                expression = "";
+                display.value = "";
+            }
+            function calculate() {
+                try {
+                    const result = Function("return " + expression)();
+                    expression = result.toString();
+                    display.value = expression;
+                } catch {
+                    display.value = "Error";
+                    expression = "";
+                }
+            }
+            function toggleSign() {
+                if (!expression) return;
+                expression = "(-1*(" + expression + "))";
+                calculate();
+            }
+            function factorial() {
+                try {
+                    const match = expression.match(/(\d+)$/);
+                    if (!match) throw Error();
+                    const n = BigInt(match[1]);
+                    if (n < 0n) throw Error();
+                    const MAX_INT64 = 9223372036854775807n;
+                    let result = 1n;
+                    for (let i = 2n; i <= n; i++) {
+                        result *= i;
+                        if (result > MAX_INT64) {
+                            throw new Error("Overflow");
+                        }
+                    }
+                    expression = expression.replace(/(\d+)$/, result.toString());
+                    display.value = expression;
+                } catch {
+                    display.value = "Overflow / Error";
+                    expression = "";
+                }
+            }
+        </script>
+    </body>
+</html>
