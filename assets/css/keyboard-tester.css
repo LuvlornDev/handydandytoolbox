@@ -1,0 +1,132 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #0f1220;
+    color: #ffffff;
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: #262b5f;
+    text-decoration: none;
+    color: white;
+    border-radius: 6px;
+}
+
+.back:hover {
+    background: #3a4080;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+.subtitle {
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.stats {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #51cf66;
+    font-family: monospace;
+}
+
+.keyboard-display {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+#keyDisplay {
+    background: #0f1220;
+    border: 2px solid #262b5f;
+    border-radius: 8px;
+    padding: 2rem;
+    font-size: 3rem;
+    text-align: center;
+    font-family: monospace;
+}
+
+.layout-select {
+    margin: 1.5rem 0;
+}
+
+.keyboard-layout {
+    background: #0f1220;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.keyboard-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.key {
+    background: #1b1f3b;
+    border: 2px solid #262b5f;
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    min-width: 35px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+
+.key.pressed {
+    background: #51cf66;
+    color: #000;
+    border-color: #51cf66;
+    box-shadow: 0 0 10px #51cf66;
+}
+
+.key.not-tested {
+    opacity: 0.5;
+}
+
+.info-section {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+button {
+    background: #51cf66;
+    color: #000;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
