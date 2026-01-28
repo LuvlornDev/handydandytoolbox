@@ -1,1 +1,47 @@
-
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Media Converter | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/media-converter.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Media Converter</h1>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="mediaType">1. Select Media Type:</label>
+                    <select id="mediaType" onchange="updatebuttons()">
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                        <option value="image">Image</option>
+                    </select>
+                </div>
+                <div class="control-group full-width">
+                    <label>2. Convert To:</label>
+                    <div id="formatButtons" class="format-grid">
+                    </div>
+                </div>
+                <div class="control-group full-width">
+                    <label for="fileUpl">3. Upload File:</label>
+                    <input type="file" id="fileUpl">
+                    <p id="errorMsg" class="error-message"></p>
+                </div>
+                <div class="control-group full-width">
+                    <button id="convertBtn" onclick="processConversion()">Convert File</button>
+                    <button class="danger" onclick="resetConverter()" style="margin-top: 10px;">Reset</button>
+                </div>
+            </div>
+            <div class="preview-area" id="outputArea" style="display:none;">
+                <h3>Conversion Complete!</h3>
+                <p>Your file has been converted to <span id="targetExtDisplay"></span>.</p>
+                <div class="downloadsec" style="display:flex; justify-content:center;">
+                    <button>⬇ Download Converted File</button>
+                </div>
+            </div>
+        </div>
+        <script></script>
+    </body>
+</html>
