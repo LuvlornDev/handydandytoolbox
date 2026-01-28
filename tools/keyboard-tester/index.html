@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Keyboard Tester | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/keyboard-tester.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Keyboard Tester</h1>
+            <p class="subtitle">Press any key to test it</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-label">Keys Pressed</div>
+                    <div class="stat-value" id="keyCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Unique Keys</div>
+                    <div class="stat-value" id="uniqueCount">0</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Last Key</div>
+                    <div class="stat-value" id="lastKey">—</div>
+                </div>
+            </div>
+            <div class="keyboard-display">
+                <div class="display-label">Current Key:</div>
+                <div id="keyDisplay">Press any key...</div>
+            </div>
+            <div class="layout-select">
+                <label for="layoutSelect">Keyboard Layout:</label>
+                <select id="layoutSelect">
+                    <option value="ansi">ANSI (US)</option>
+                    <option value="iso">ISO (EU)</option>
+                </select>
+            </div>
+            <div class="keyboard-layout">
+                <div class="keyboard-row" id="row1"></div>
+                <div class="keyboard-row" id="row2"></div>
+                <div class="keyboard-row" id="row3"></div>
+                <div class="keyboard-row" id="row4"></div>
+                <div class="keyboard-row" id="row5"></div>
+            </div>
+            <div class="info-section">
+                <h3>Key Information:</h3>
+                <div class="info-content">
+                    <p><strong>Key Code:</strong> <span id="keyCode">—</span></p>
+                    <p><strong>Key:</strong> <span id="keyName">—</span></p>
+                    <p><strong>Modifier Keys:</strong> <span id="modifiers">None</span></p>
+                </div>
+                <button onclick="resetTester()">⟳ Reset</button>
+            </div>
+        </div>
+        <script>
+        const layouts = {
+            ansi: {
+                row1: ['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0','Minus','Equal','Backspace'],
+                row2: ['Tab','KeyQ','KeyW','KeyE','KeyR','KeyT','KeyY','KeyU','KeyI','KeyO','KeyP','BracketLeft','BracketRight','Backslash'],
+                row3: ['CapsLock','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','KeyJ','KeyK','KeyL','Semicolon','Quote','Enter'],
+                row4: ['ShiftLeft','KeyZ','KeyX','KeyC','KeyV','KeyB','KeyN','KeyM','Comma','Period','Slash','ShiftRight'],
+                row5: ['ControlLeft','AltLeft','Space','AltRight','ControlRight']
+            },
+            iso: {
+                row1: ['Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8','Digit9','Digit0','Minus','Equal','Backspace'],
+                row2: ['Tab','KeyQ','KeyW','KeyE','KeyR','KeyT','KeyY','KeyU','KeyI','KeyO','KeyP','BracketLeft','BracketRight'],
+                row3: ['CapsLock','KeyA','KeyS','KeyD','KeyF','KeyG','KeyH','KeyJ','KeyK','KeyL','Semicolon','Quote','Enter'],
+                row4: ['ShiftLeft','Backslash','KeyZ','KeyX','KeyC','KeyV','KeyB','KeyN','KeyM','Comma','Period','Slash','ShiftRight'],
+                row5: ['ControlLeft','AltLeft','Space','AltRight','ControlRight']
+            }
+        };
+        const labels = {
+            CapsLock:'Caps',
+            ControlLeft:'Ctrl',
+            ControlRight:'Ctrl',
+            AltLeft:'Alt',
+            AltRight:'Alt',
+            ShiftLeft:'Shift',
+            ShiftRight:'Shift',
+            Space:'Space',
+            Backspace:'Backspace',
+            Enter:'Enter',
+            Tab:'Tab'
+        };
+        const symbols = {
+            Minus: '-',
+            Equal: '=',
+            BracketLeft: '[',
+            BracketRight: ']',
+            Backslash: '\\',
+            Semicolon: ';',
+            Quote: "'",
+            Comma: ',',
+            Period: '.',
+            Slash: '/'
+        };
+        let pressedKeys = new Set();
+        let totalKeyPresses = 0;
+        function renderKeyboard(layoutName) {
+        document.querySelectorAll('.keyboard-row').forEach(r => r.innerHTML = '');
+        const layout = layouts[layoutName];
+
+        for (const [rowId, keys] of Object.entries(layout)) {
+            const row = document.getElementById(rowId);
+
+            keys.forEach(code => {
+                const key = document.createElement('div');
+                key.className = 'key not-tested';
+                key.id = 'key-' + code;
+
+                // 🔑 FIXED LABEL LOGIC
+                key.textContent =
+                    labels[code] ||
+                    symbols[code] ||
+                    code.replace(/^Key|Digit/, '');
+
+                row.appendChild(key);
+            });
+        }
+    }
+        renderKeyboard('ansi');
+        document.getElementById('layoutSelect').addEventListener('change', e => {
+            renderKeyboard(e.target.value);
+            resetTester();
+        });
+        document.addEventListener('keydown', e => {
+            const keyEl = document.getElementById('key-' + e.code);
+            totalKeyPresses++;
+            pressedKeys.add(e.code);
+            document.getElementById('keyCount').textContent = totalKeyPresses;
+            document.getElementById('uniqueCount').textContent = pressedKeys.size;
+            document.getElementById('lastKey').textContent = e.key === ' ' ? 'Space' : e.key;
+            document.getElementById('keyDisplay').textContent = e.key === ' ' ? 'Space' : e.key;
+            document.getElementById('keyCode').textContent = e.code;
+            document.getElementById('keyName').textContent = e.key;
+            const mods = [];
+            if (e.ctrlKey) mods.push('Ctrl');
+            if (e.altKey) mods.push('Alt');
+            if (e.shiftKey) mods.push('Shift');
+            if (e.metaKey) mods.push('Meta');
+            document.getElementById('modifiers').textContent = mods.join(' + ') || 'None';
+            if (keyEl) {
+                keyEl.classList.remove('not-tested');
+                keyEl.classList.add('pressed');
+            }
+        });
+        document.addEventListener('keyup', e => {
+            const keyEl = document.getElementById('key-' + e.code);
+            if (keyEl) keyEl.classList.remove('pressed');
+        });
+        function resetTester() {
+            pressedKeys.clear();
+            totalKeyPresses = 0;
+            document.querySelectorAll('.key').forEach(k => {
+                k.classList.remove('pressed');
+                k.classList.add('not-tested');
+            });
+            document.getElementById('keyCount').textContent = '0';
+            document.getElementById('uniqueCount').textContent = '0';
+            document.getElementById('lastKey').textContent = '—';
+            document.getElementById('keyDisplay').textContent = 'Press any key...';
+            document.getElementById('keyCode').textContent = '—';
+            document.getElementById('keyName').textContent = '—';
+            document.getElementById('modifiers').textContent = 'None';
+        }
+        </script>
+    </body>
+</html>
