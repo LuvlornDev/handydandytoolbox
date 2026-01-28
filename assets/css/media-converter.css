@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #0f1220;
+    color: #ffffff;
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background: #262b5f;
+    text-decoration: none;
+    color: white;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.back:hover {
+    background: #3a4080;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.controls {
+    background: #1b1f3b;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: bold;
+    color: #aeb3cc;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+select, input[type="file"] {
+    padding: 0.8rem;
+    border: 2px solid #262b5f;
+    border-radius: 6px;
+    background: #0f1220;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+select:focus, input:focus {
+    outline: none;
+    border-color: #51cf66;
+}
+
+.format-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    background: #0f1220;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #262b5f;
+}
+
+.format-btn {
+    padding: 0.6rem;
+    background: #1b1f3b;
+    border: 1px solid #262b5f;
+    color: #aeb3cc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.format-btn:hover {
+    background: #262b5f;
+    color: white;
+}
+
+.format-btn.active {
+    background: #51cf66;
+    color: #000;
+    border-color: #51cf66;
+    font-weight: bold;
+}
+
+button {
+    padding: 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    background: #51cf66;
+    color: #000;
+    font-weight: bold;
+    transition: filter 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.1);
+}
+
+button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+button.danger {
+    background: #ff6b6b;
+    color: white;
+}
+
+button.danger:hover {
+    background: #ff5252;
+}
+
+.error-message {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 0.8rem;
+    border-radius: 6px;
+    border: 1px solid #ff6b6b;
+    display: none;
+    margin-top: 0.5rem;
+}
+
+.preview-area {
+    background: #1b1f3b;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    border: 2px dashed #51cf66;
+}
+
+.preview-area h3 {
+    color: #51cf66;
+    margin-top: 0;
+}
