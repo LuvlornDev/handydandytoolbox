@@ -9,20 +9,20 @@
     <body>
         <div class="container">
             <a href="../../index.html" class="back">← Go Back</a>
-            <h1>Media Converter</h1>
+            <h1>Universal Media Converter</h1>
             <div class="controls">
                 <div class="control-group">
                     <label for="mediaType">1. Select Media Type:</label>
-                    <select id="mediaType" onchange="updatebuttons()">
+                    <select id="mediaType" onchange="updateFormatButtons()">
                         <option value="video">Video</option>
                         <option value="audio">Audio</option>
-                        <option value="image">Image</option>
+                        <option value="image">Photo</option>
                     </select>
                 </div>
                 <div class="control-group full-width">
-                    <label>2. Convert To:</label>
+                    <label>2. Convert to:</label>
                     <div id="formatButtons" class="format-grid">
-                    </div>
+                        </div>
                 </div>
                 <div class="control-group full-width">
                     <label for="fileUpl">3. Upload File:</label>
@@ -42,6 +42,128 @@
                 </div>
             </div>
         </div>
-        <script></script>
+		<script>
+			const formats = {
+				video: ['MP4', 'MOV', 'WEBM', 'MKV'],
+				audio: ['MP3', 'WAV', 'OGG', 'M4A'],
+				image: ['PNG', 'JPEG', 'WEBP', 'ICO']
+			};
+			const mediaTypeSelect = document.getElementById('mediaType');
+			const formatButtonsContainer = document.getElementById('formatButtons');
+			const fileInput = document.getElementById('fileUpl');
+			const errorMsg = document.getElementById('errorMsg');
+			const outputArea = document.getElementById('outputArea');
+			const convertBtn = document.getElementById('convertBtn');
+			const downloadBtn = document.querySelector('.downloadsec button');
+			const targetExtDisplay = document.getElementById('targetExtDisplay');
+			let selectedFormat = null;
+			let convertedBlob = null;
+			window.onload = updateFormatButtons;
+			function updateFormatButtons() {
+				const type = mediaTypeSelect.value;
+				const availableFormats = formats[type];
+				formatButtonsContainer.innerHTML = ''; 
+				selectedFormat = null; 
+				errorMsg.style.display = 'none';
+				availableFormats.forEach(fmt => {
+					const btn = document.createElement('button');
+					btn.textContent = fmt;
+					btn.className = 'format-btn';
+					btn.onclick = () => selectFormat(btn, fmt);
+					formatButtonsContainer.appendChild(btn);
+				});
+			}
+			function selectFormat(btnElement, fmt) {
+				const allBtns = document.querySelectorAll('.format-btn');
+				allBtns.forEach(b => b.classList.remove('active'));
+				btnElement.classList.add('active');
+				selectedFormat = fmt;
+			}
+			function processConversion() {
+				const file = fileInput.files[0];
+				const category = mediaTypeSelect.value;
+				errorMsg.style.display = 'none';
+				outputArea.style.display = 'none';
+				convertedBlob = null;
+				if (!file) return showError("Please upload a file first.");
+				if (!selectedFormat) return showError("Please select a target format.");
+				if (!file.type.startsWith(category)) {
+					if(category === 'image' && !file.type.startsWith('image')) {
+						return showError("Please upload a valid image file.");
+					}
+					if(category !== 'image' && !file.type.startsWith(category)) {
+						return showError(`Error: You selected '${category.toUpperCase()}' but uploaded a different file type.`);
+					}
+				}
+				convertBtn.textContent = "Converting...";
+				convertBtn.disabled = true;
+				if (category === 'image') {
+					convertImage(file);
+				}
+				else {
+					mockConvertVideoAudio(file);
+				}
+			}
+			function convertImage(file) {
+				const reader = new FileReader();
+				reader.onload = function(event) {
+					const img = new Image();
+					img.onload = function() {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+						canvas.width = img.width;
+						canvas.height = img.height;
+						ctx.drawImage(img, 0, 0);
+						let mimeType = 'image/' + selectedFormat.toLowerCase();
+						if(selectedFormat === 'JPG') mimeType = 'image/jpeg';
+						if(selectedFormat === 'ICO') mimeType = 'image/x-icon';
+						canvas.toBlob(function(blob) {
+							finishConversion(blob);
+						}, mimeType);
+					};
+					img.src = event.target.result;
+				};
+				reader.readAsDataURL(file);
+			}
+			function mockConvertVideoAudio(file) {
+				setTimeout(() => {
+					finishConversion(file);
+				}, 1500);
+			}
+			function finishConversion(blob) {
+				convertedBlob = blob;
+				convertBtn.textContent = "Convert File";
+				convertBtn.disabled = false;
+				outputArea.style.display = 'block';
+				targetExtDisplay.textContent = selectedFormat;
+				downloadBtn.onclick = function() {
+					if(!convertedBlob) return;
+					const originalName = fileInput.files[0].name;
+					const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+					const newFileName = `${nameWithoutExt}.${selectedFormat.toLowerCase()}`;
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(convertedBlob);
+					link.download = newFileName;
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);
+				};
+				outputArea.scrollIntoView({behavior: "smooth"});
+			}
+			function showError(msg) {
+				errorMsg.textContent = msg;
+				errorMsg.style.display = 'block';
+				convertBtn.textContent = "Convert File";
+				convertBtn.disabled = false;
+			}
+			function resetConverter() {
+				fileInput.value = '';
+				outputArea.style.display = 'none';
+				errorMsg.style.display = 'none';
+				const allBtns = document.querySelectorAll('.format-btn');
+				allBtns.forEach(b => b.classList.remove('active'));
+				selectedFormat = null;
+			}
+		</script>
     </body>
 </html>
