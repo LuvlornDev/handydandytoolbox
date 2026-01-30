@@ -1,1 +1,74 @@
-
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Generator | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/password-gen.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Fort Knox Password Generator</h1>
+            <div class="display-box">
+                <div id="passwordDisplay">Click Generate</div>
+                <button class="copy-btn" onclick="copyPassword()" title="Copy to Clipboard">Copy</button>
+            </div>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="lengthRange">Password Length: <span id="lengthVal">16</span></label>
+                    <input type="range" id="lengthRange" min="6" max="64" value="16" oninput="document.getElementById('lengthVal').innerText = this.value">
+                </div>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="incUpper" checked> Include Uppercase (A-Z)</label>
+                    <label><input type="checkbox" id="incLower" checked> Include Lowercase (a-z)</label>
+                    <label><input type="checkbox" id="incNum" checked> Include Numbers (0-9)</label>
+                    <label><input type="checkbox" id="incSym" checked> Include Symbols (@#$)</label>
+                </div>
+                <button onclick="generatePassword()" class="gen-btn"></button>
+                <div id="msg" class="success-msg">Copied to Clipboard!</div>
+            </div>
+        </div>
+        <script>
+            const display = document.getElementById('passwordDisplay');
+            const lengthRange = document.getElementById('lengthRange');
+            const incUpper = document.getElementById('incUpper');
+            const incLower = document.getElementById('incLower');
+            const incNum = document.getElementById('incNum');
+            const incSym = document.getElementById('incSym');
+            const msg = document.getElementById('msg');
+            const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const lower = "abcdefghijklmnopqrstuvwxyz";
+            const nums = "0123456789";
+            const syms = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+            function generatePassword() {
+                let chars = "";
+                if(incUpper.checked) chars += upper;
+                if(incLower.checked) chars += lower;
+                if(incNum.checked) chars += nums;
+                if(incSym.checked) chars += syms;
+                if(chars === "") {
+                    display.innerText = "Select at least one option!";
+                    return;
+                }
+                let password = "";
+                for(let i = 0; i < lengthRange.value; i++) {
+                    const random = Math.floor(Math.random() * chars.length);
+                    password += chars[random];
+                }
+                display.innerText = password;
+                display.style.color = "#51cf66";
+                msg.style.opacity = 0;
+            }
+            function copyPassword() {
+                const text = display.innerText;
+                if(text === "Click Generate" || text === "Select at least one option!") return;
+                navigator.clipboard.writeText(text).then(() => {
+                    msg.style.opacity = 1;
+                    setTimeout(() => msg.style.opacity = 0, 2000);
+                });
+            }
+            window.onload = generatePassword;
+        </script>
+    </body>
+</html>
