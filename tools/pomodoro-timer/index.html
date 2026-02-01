@@ -1,1 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pomodoro Timer | Ø's Handy Dandy Toolbox</title>
+        <link rel="stylesheet" href="../../assets/css/pomodoro.css">
+    </head>
+    <body>
+        <div class="container">
+            <a href="../../index.html" class="back">← Go Back</a>
+            <h1>Focus Timer</h1>
+            <div class="timer-card">
+                <div class="mode-selector">
+                    <button id="focusBtn" class="mode-btn active" onclick="setMode(1500, 'focus')">Focus (25:00)</button>
+                    <button id="breakBtn" class="mode-btn" onclick="setMode(300, 'break')">Break (05:00)</button>
+                </div>
+                <div class="timer-ring" id="timerRing">
+                    <div class="timer-inner">
+                        <h2 id="timeDisplay">25:00</h2>
+                        <p id="statusText">Ready to work?</p>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button onclick="toggleTimer()" id="startBtn">Start</button>
+                    <button class="reset" onclick="resetTimer()">Reset</button>
+                </div>
+                <div class="snoozebutton">
+                    <button onclick="stopAlarm()">Snooze</button>
+                </div>
+            </div>
+        </div>
+        <audio id="alarmSound" src="../../assets/audio/alarm.mp3" loop></audio>
+        <script>
+            let timeLeft = 1500;
+            let totalTime = 1500;
+            let timerId = null;
+            let isRunning = false;
+            const display = document.getElementById('timeDisplay');
+            const ring = document.getElementById('timerRing');
+            const startBtn = document.getElementById('startBtn');
+            const statusText = document.getElementById('statusText');
+            const alarmSound = document.getElementById('alarmSound');
 
+            function formatTime(seconds) {
+                const m = Math.floor(seconds/60);
+                const s = seconds % 60;
+                return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            function updateDisplay() {
+                display.innerText = formatTime(timeLeft);
+                document.title = `${formatTime(timeLeft)} - Pomodoro`;
+                const percent = ((totalTime - timeLeft) / totalTime) * 100;
+                ring.style.background = `conic-gradient(#51cf66 ${percent}%, #262b5f ${percent}% 100%)`;
+            }
+            function toggleTimer() {
+                if (isRunning) {
+                    clearInterval(timerId);
+                    startBtn.innerText = "Start";
+                    startBtn.style.background = "#51cf66";
+                }
+                else {
+                    stopAlarm();
+                    timerId = setInterval(() => {
+                        timeLeft--;
+                        updateDisplay();
+                        if (timeLeft <= 0) {
+                            clearInterval(timerId);
+                            finishTimer();
+                        }
+                    }, 1000);
+                    startBtn.innerText = "Pause";
+                    startBtn.style.background = "#ffd43b";
+                }
+                isRunning = !isRunning;
+            }
+            function finishTimer() {
+                isRunning = false;
+                startBtn.innerText = "Start";
+                statusText.innerText = "Time's Up!";
+                //audio
+                alarmSound.currentTime = 0;
+                alarmSound.play().catch(err => {
+                    console.warn("Audio blocked by browser:", err);
+                });
+            }
+            function resetTimer() {
+                clearInterval(timerId);
+                isRunning = false;
+                stopAlarm();
+                timeLeft = totalTime;
+                startBtn.innerText = "Start";
+                startBtn.style.background = "#51cf66";
+                statusText.innerText = "Ready?";
+                updateDisplay();
+            }
+            function setMode(seconds, mode) {
+                stopAlarm();
+                resetTimer();
+                totalTime = seconds;
+                timeLeft = seconds;
+                updateDisplay();
+                document.getElementById('focusBtn').classList.toggle('active', mode === 'focus');
+                document.getElementById('breakBtn').classList.toggle('active', mode === 'break');
+                if(mode === 'break') {
+                    ring.style.setProperty('--c', '#ff6b6b');
+                    statusText.innerText = "Time to Relax";
+                }
+                else {
+                    statusText.innerText = "Time to Focus";
+                }
+                updateDisplay();
+            }
+            function stopAlarm() {
+                alarmSound.pause();
+                alarmSound.currentTime = 0;
+            }
+            updateDisplay();
+        </script>
+    </body>
+</html>
