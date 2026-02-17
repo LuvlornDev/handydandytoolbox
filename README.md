@@ -22,7 +22,7 @@ And I sure want to go to NYC so so bad!
 
 Time to do this? I have no Idea how I'm doing it but we're progressing :)
 
-I'll keep you updated in my socials if I end up going to NYC! You can check my socials in my[LinkTree](https://linktr.ee/luvlorn.wav) or probably I'll be more active in my [SpaceHey](https://spacehey.com/luvlornmusic) blog!
+I'll keep you updated in my socials if I end up going to NYC! You can check my socials in my [LinkTree](https://linktr.ee/luvlorn.wav) or probably I'll be more active in my [SpaceHey](https://spacehey.com/luvlornmusic) blog!
 
 But yeah! Besides from training my HTML and JavaScript skills, this project is participating in [HackClub: The Game](https://game.hackclub.com/)!
 
@@ -65,5 +65,6 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
+
 
 [MIT](https://choosealicense.com/licenses/mit/)
